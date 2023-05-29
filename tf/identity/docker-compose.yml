@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  fusionauth:
+    image: fusionauth/fusionauth-app:latest
+    environment:
+      DATABASE_URL: jdbc:postgresql://prod.db.imshaby:5432/fusionauth
+      DATABASE_ROOT_USERNAME: cmsadmin
+      DATABASE_ROOT_PASSWORD: GXNbnl48430
+      DATABASE_USERNAME: fusionauth
+      DATABASE_PASSWORD: hkaLBM3RVnyYeYeqE3WI1w2e4Avpy0Wd5O3s3
+      FUSIONAUTH_APP_MEMORY: 1024M
+      FUSIONAUTH_APP_RUNTIME_MODE: production
+      FUSIONAUTH_APP_URL: http://fusionauth:9011
+      SEARCH_SERVERS: http://search:9200
+      SEARCH_TYPE: database
+      FUSIONAUTH_USE_GLOBAL_JAVA: 1
+      FUSIONAUTH_APP_SILENT_MODE: true
+      ES_JAVA_OPTS: "-Xms1024m -Xmx1024m"
+
+    restart: unless-stopped
+    ports:
+      - 9011:9011
+    volumes:
+      - fusionauth_config:/usr/local/fusionauth/config
+    # volumes:
+    #   - /home/yc-user/coi-data:/data
+
+# x-yc-disks:
+#   - device_name: coi-data
+#     fs_type: ext4
+#     host_path: /home/yc-user/coi-data
+volumes:
+  fusionauth_config:
