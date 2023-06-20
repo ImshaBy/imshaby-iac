@@ -41,6 +41,10 @@ variable "identity_alb_name" {
 variable "identity_https_listener_name" {
   type        = string
 }
-variable "identity_sni_handler_name" {
+variable "cms_http_router_name" {
   type        = string
 }
+variable "cms_http_listener_name" {
+  type        = string
+}
+

@@ -6,9 +6,6 @@ variable "subnet_id" {
   default     = "TBD"
 }
 
-variable "network_id" {
-  type        = string
-}
 
 variable "network_name" {
   type        = string
@@ -100,7 +97,10 @@ variable "identity_alb_name" {
 variable "identity_https_listener_name" {
   type        = string
 }
-variable "identity_sni_handler_name" {
+variable "cms_http_router_name" {
+  type        = string
+}
+variable "cms_http_listener_name" {
   type        = string
 }
 
@@ -109,4 +109,32 @@ variable "identity_sni_handler_name" {
 variable "db_instance_name" {
   type        = string
   default     = "db-instances"
+}
+variable "front_site_backet_name" {
+  type        = string
+}
+variable "index_site_page" {
+  type        = string
+}
+variable "error_site_page" {
+  type        = string
+}
+variable "front_site_cdn_group_name" {
+  type        = string
+}
+variable "service_acc_name" {
+  type        = string
+}
+
+variable "front_admin_backet_name" {
+  type        = string
+}
+variable "index_admin_page" {
+  type        = string
+}
+variable "error_admin_page" {
+  type        = string
+}
+variable "front_admin_cdn_group_name" {
+  type        = string
 }

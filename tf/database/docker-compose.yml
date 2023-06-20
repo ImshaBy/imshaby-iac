@@ -9,7 +9,6 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: mongoadmin
       MONGO_INITDB_ROOT_PASSWORD: HHPebl16917
-
   redis:
     image: redis:6.2.6
     volumes:

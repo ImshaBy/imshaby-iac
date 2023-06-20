@@ -5,6 +5,19 @@ terraform {
     }
   }
 
+  backend "s3" {
+    endpoint   = "storage.yandexcloud.net"
+    bucket     = "tf-bucket-imshaby"
+    region     = "ru-central1"
+    key        = "imshaby-common/production/terraform.tfstate"
+    access_key = "${ACCESS_KEY}"
+
+    secret_key = "${SECRET_KEY}"
+    dynamodb_endpoint = "${DYNAMODB_ENDPOINT}"
+    dynamodb_table    = "state-lock-tf"
+    skip_region_validation      = true
+    skip_credentials_validation = true
+  }
   required_version = ">= 0.13"
 }
 

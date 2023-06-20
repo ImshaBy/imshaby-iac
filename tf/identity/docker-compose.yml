@@ -5,18 +5,19 @@ services:
     image: fusionauth/fusionauth-app:latest
     environment:
       DATABASE_URL: jdbc:postgresql://prod.db.imshaby:5432/fusionauth
-      DATABASE_ROOT_USERNAME: cmsadmin
-      DATABASE_ROOT_PASSWORD: GXNbnl48430
-      DATABASE_USERNAME: fusionauth
-      DATABASE_PASSWORD: hkaLBM3RVnyYeYeqE3WI1w2e4Avpy0Wd5O3s3
-      FUSIONAUTH_APP_MEMORY: 1024M
+      # jdbc:postgresql://192.168.1.5:5432/fusionauth
+      DATABASE_ROOT_USERNAME: cmsadmin # webadmin
+      DATABASE_ROOT_PASSWORD: GXNbnl48430 # OCOxvb44653
+      DATABASE_USERNAME: fusionauth #
+      DATABASE_PASSWORD: hkaLBM3RVnyYeYeqE3WI1w2e4Avpy0Wd5O3s3 #
+      FUSIONAUTH_APP_MEMORY: 1024M # 512M
       FUSIONAUTH_APP_RUNTIME_MODE: production
       FUSIONAUTH_APP_URL: http://fusionauth:9011
       SEARCH_SERVERS: http://search:9200
       SEARCH_TYPE: database
       FUSIONAUTH_USE_GLOBAL_JAVA: 1
       FUSIONAUTH_APP_SILENT_MODE: true
-      ES_JAVA_OPTS: "-Xms1024m -Xmx1024m"
+      ES_JAVA_OPTS: "-Xms1024m -Xmx1024m" # -Xms512m -Xmx512m
 
     restart: unless-stopped
     ports:

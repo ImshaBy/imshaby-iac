@@ -49,15 +49,37 @@ resource "yandex_alb_virtual_host" "identity_virtual_host" {
     name = "X-Forwarded-Port"
     replace = "443"
   }
+  modify_request_headers {
+   name    = "X-Forwarded-For"
+   replace = yandex_compute_instance.identity_app.network_interface.0.nat_ip_address
+}
+ modify_request_headers {
+   name    = "X-Forwarded-Host"
+   replace = var.identity_domain_name
+}
+ modify_request_headers {
+   name    = "X-Forwarded-Proto"
+   replace = "https"
+}
+ modify_request_headers {
+   name    = "X-Forwarded-Server"
+   replace = var.identity_domain_name
+}
+
   route {
     name = var.identity_route_name
     http_route {
       http_route_action {
         backend_group_id = yandex_alb_backend_group.identity_backend_group.id
         timeout          = "3s"
+        auto_host_rewrite = true
       }
     }
   }
+}
+
+data "yandex_alb_http_router" "cms-http-router" {
+  name = var.cms_http_router_name
 }
 
 
@@ -83,35 +105,77 @@ resource "yandex_alb_load_balancer" "identity-alb" {
       }
       ports = [ 80 ]
     }
-    tls {
-      default_handler  {
-        http_handler {
-            http_router_id = yandex_alb_http_router.identity_http_router.id
-        }
-        # stream_handler {
-        #     backend_group_id = yandex_alb_backend_group.identity_backend_group.id
-        # }
-        certificate_ids = ["fpqm2crjdaa9lv96e686"] //var??
-      }
-      sni_handler {
-        name = var.identity_sni_handler_name
-        server_names = [var.identity_domain_name] // var.identity_domain_name
-        handler {
-            http_handler {
-                http_router_id = yandex_alb_http_router.identity_http_router.id
-            }
-            # stream_handler {
-            #     backend_group_id = yandex_alb_backend_group.identity_backend_group.id
-            # }
-            certificate_ids = ["fpqm2crjdaa9lv96e686"] //var??
-        }
+    http {
+      handler {
+        http_router_id = yandex_alb_http_router.identity_http_router.id
       }
     }
   }
+
   log_options {
     discard_rule {
       http_code_intervals = ["HTTP_2XX"]
       discard_percent = 75
     }
   }
+
+  listener {
+    name = var.cms_http_listener_name
+    endpoint {
+      address {
+        external_ipv4_address {
+            # address = yandex_vpc_address.alb_addr.external_ipv4_address.0.address
+        }
+      }
+      ports = [ 81 ]
+    }
+    http {
+      handler {
+        http_router_id = data.yandex_alb_http_router.cms-http-router.id
+      }
+    }
+  }
+
+   listener {
+      name = "prod-site-http-listener"
+      endpoint {
+      ports = [
+      83]
+    address {
+      external_ipv4_address {
+                    }
+                }
+            }
+
+       http {
+       handler {
+       allow_http10       = false
+       http_router_id     = "ds7abi6ci03p14v9j90j"
+       rewrite_request_id = false
+      }
+            }
+        }
+       listener {
+       name = "prod-admin-http-listener"
+
+       endpoint {
+       ports = [
+       84,
+                ]
+
+       address {
+       external_ipv4_address {
+
+                    }
+                }
+            }
+
+      http {
+       handler {
+       allow_http10       = false
+       http_router_id     = "ds7t6hsokls4ecc4oes2"
+       rewrite_request_id = false
+      }
+            }
+        }
 }
