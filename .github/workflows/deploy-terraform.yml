@@ -7,12 +7,16 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
-      tags:
-        description: 'Test scenario tags'
+      api:
+        description: 'API Docker Image tag'
+        required: true
+        default: 'cr.yandex/crp8o64j2cl644b4pjki/imshaby-api:d5eaacb9dce9ef65c152c30c91d5d48371e1642f'
+        type: string
+      bot:
+        description: 'Bot Docker Image tag'
+        default: 'cr.yandex/crp8o64j2cl644b4pjki/imshaby-bot:74a6207fa4b287af8651aff52dbac1d678ec415c'
         required: true
         type: string
-  push:
-    branches: [ master ]
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
